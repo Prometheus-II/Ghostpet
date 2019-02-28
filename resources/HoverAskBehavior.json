@@ -1,0 +1,16 @@
+{
+	"imageUsed":"speak.png",
+	"statements":[
+	"What can I do for you, $NAME$?",
+	"What do you need?"
+	],
+	"actTime":30,
+		
+	"opts":[
+	{"line":"Run a talk test","behave":"GenLongTalkBehavior"},
+	{"line":"Shut down","behave":"SleepBehavior"},
+	{"line":"Cancel","behave":"GiveUpBehavior"}
+	],
+	
+	"giveUp":"GiveUpBehavior"
+}

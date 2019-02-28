@@ -1,0 +1,9 @@
+{
+	"ghostName":"Stickman",
+	"UserName":"Boss",
+	"DefaultImg":"stand.png",
+	"TxtBoxImg":"SampleTextBox.png",
+	"FontFile":null,
+	"maxWidth":0,
+	"maxHeight":0
+}

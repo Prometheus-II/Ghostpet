@@ -1,0 +1,18 @@
+{
+	"chains": [
+		{
+			"stmts":["Just testing this.","Don't mind me.","Really, don't."],
+			"times":[3,3,3],
+			"imgStrs":["speak.png",null,null]
+		},
+		{
+			"stmts":["Oh, it's another test.","Just go ahead and stop looking."],
+			"times":[3,5],
+			"imgStrs":["speak.png",null]
+		}
+		
+	],
+	
+	"actTime": -1,
+	"hasSetValue":false
+}
