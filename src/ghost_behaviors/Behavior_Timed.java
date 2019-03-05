@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 import ghostpet.GhostBase;
 import ghostpet.GhostState;
 
-public abstract class Behavior_Timed extends Behavior { //Definitely doesn't need to be a Behavior; however, making it one lets me reuse all the loading things I've written. 
+public class Behavior_Timed extends Behavior { //Definitely doesn't need to be a Behavior; however, making it one lets me reuse all the loading things I've written. 
 
 	transient int secSinceLast = 0;
 	int minSinceLast;
