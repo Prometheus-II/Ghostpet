@@ -84,3 +84,4 @@
 	* Allow two ghosts to run in the same window, interacting with each other
 	* Allow you to let the ghost check your email, notifying you every so often of new ones
 	* Create a new behavior type for behaviors that happen sequentially
+	* Allow the text box to rescale if there's too many lines/text to fit in it

@@ -82,12 +82,6 @@ public class SpeakPanel extends JPanel {
 		gbl_AskPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		AskPanel.setLayout(gbl_AskPanel);
 		
-		Component verticalGlue = Box.createVerticalGlue();
-		GridBagConstraints gbc_verticalGlue = new GridBagConstraints();
-		gbc_verticalGlue.gridx = 0;
-		gbc_verticalGlue.gridy = 7;
-		AskPanel.add(verticalGlue, gbc_verticalGlue);
-		
 		AskPanel.setVisible(false);
 		setVisible(false);
 	}
@@ -108,8 +102,7 @@ public class SpeakPanel extends JPanel {
 			gbc_optLabel.gridy = y;
 			gbc_optLabel.weighty = 0;
 			gbc_optLabel.anchor = GridBagConstraints.NORTHWEST;
-			//gbc_optLabel.ipady = 10;
-			gbc_optLabel.insets = new Insets(15, 0, 5, 0);
+			gbc_optLabel.insets = new Insets(5, 0, 5, 0);
 			out = opts[i].line;
 			out = out.replaceAll(Pattern.quote("$NAME$"), parent.data.UserName);
 			out = out.replaceAll(Pattern.quote("$GNAME$"), parent.data.ghostName);
@@ -122,6 +115,12 @@ public class SpeakPanel extends JPanel {
 			
 			y++;
 		}
+		Component verticalGlue = Box.createVerticalGlue();
+		GridBagConstraints gbc_verticalGlue = new GridBagConstraints();
+		gbc_verticalGlue.gridx = 0;
+		gbc_verticalGlue.gridy = y;
+		AskPanel.add(verticalGlue, gbc_verticalGlue);
+				
 		AskPanel.setVisible(true);
 		setVisible(true);
 		updateUI();

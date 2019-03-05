@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 
 import ghostpet.GhostBase;
 
-public abstract class Behavior_Randomizer extends Behavior {
+public class Behavior_Randomizer extends Behavior {
 	
 	String[] behaves;
 	public transient Behavior[] behaviors;
