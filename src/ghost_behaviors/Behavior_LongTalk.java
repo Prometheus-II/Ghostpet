@@ -29,12 +29,18 @@ public class Behavior_LongTalk extends Behavior {
 	}
 
 	public Behavior_LongTalk() {
-		entersState = GhostState.Speaking;
+		entersState = GhostState.LongTalk;
 		// TODO Auto-generated constructor stub
 	}
 	
 	public void setup()
 	{
+		actTime = 0.0f;
+		for(int i = 0; i < chains[numUsed].times.length; i++)
+		{
+			actTime += chains[numUsed].times[i];
+		}
+		
 		ImageIcon prev = null;
 		for(int j = 0; j < chains.length; j++)
 		{

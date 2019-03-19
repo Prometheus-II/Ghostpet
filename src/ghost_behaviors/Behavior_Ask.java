@@ -35,8 +35,8 @@ public class Behavior_Ask extends Behavior {
 			try {
 				@SuppressWarnings("unchecked")
 				Class<T> C = (Class<T>) Class.forName(str);
-				opts[i].bhvr = C.newInstance().loadInfo(parent);
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+				opts[i].bhvr = parent.getBehavior(C);
+			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(parent, "The Ask behavior "+getClass().getSimpleName()+
 						"could not load the behavior "+opts[i].behave+": Class does not exist. Did you remove a .json file without updating references to it, or name a class that you didn't compile?",
@@ -62,7 +62,6 @@ public class Behavior_Ask extends Behavior {
 	@Override
 	public <T extends Behavior> T loadInfo(GhostBase frame) {
 		T returner = super.loadInfo(frame);
-		((Behavior_Ask) returner).setup();
 		return returner;
 	}
 	

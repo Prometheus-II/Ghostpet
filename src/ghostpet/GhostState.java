@@ -1,5 +1,5 @@
 package ghostpet;
 
 public enum GhostState {
-	Speaking, Notifying, Asking, Petted, Passive;
+	Speaking, LongTalk, Asking, Petted, Passive;
 }
