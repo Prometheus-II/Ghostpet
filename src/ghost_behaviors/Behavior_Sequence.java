@@ -1,33 +1,30 @@
 package ghost_behaviors;
 
-import java.util.Random;
-
 import javax.swing.JOptionPane;
 
 import ghostpet.GhostBase;
 import ghostpet.GhostState;
 
-public class Behavior_Randomizer extends Behavior {
+public class Behavior_Sequence extends Behavior {
 	
 	String[] behaves;
 	public transient Behavior[] behaviors;
 	
-	public Behavior_Randomizer(GhostBase frame) {
-		super(frame);
-		// TODO Auto-generated constructor stub
-	}
+	public transient Behavior prevBehavior;
+	public int numOfBehavior;
 
-	public Behavior_Randomizer() {
+	public Behavior_Sequence() {
 		entersState = GhostState.Passive;
 	}
 	
 	@Override
-	public <T extends Behavior> T loadInfo(GhostBase frame) {		
+	public <T extends Behavior> T loadInfo(GhostBase frame) {	
 		T returner = super.loadInfo(frame);
 		return returner;
 	}
 	
 	public <T extends Behavior> void setup() {
+		numOfBehavior = 0;
 		behaviors = new Behavior[behaves.length];
 		String str;
 		for(int i = 0; i < behaves.length; i++)
@@ -45,7 +42,7 @@ public class Behavior_Randomizer extends Behavior {
 					behaviors[i] = parent.getBehavior(C);
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
-					JOptionPane.showMessageDialog(parent, "The randomizer behavior "+getClass().getSimpleName()+
+					JOptionPane.showMessageDialog(parent, "The sequence behavior "+getClass().getSimpleName()+
 							"could not load the behavior "+behaves[i]+": Class does not exist. Did you remove a .json file without updating references to it, or name a class that you didn't compile?",
 							"Behavior loading error", JOptionPane.ERROR_MESSAGE);
 					behaviors[i] = null;
@@ -54,18 +51,15 @@ public class Behavior_Randomizer extends Behavior {
 		}
 	}
 	
-	public void SelectRandom()
+	public Boolean ExecNextSequence()
 	{
-		Random r = new Random();
-		int t = r.nextInt(behaviors.length);
-		if(behaviors[t] == null)
+		parent.Say(behaviors[numOfBehavior]);
+		numOfBehavior++;
+		if(numOfBehavior >= behaviors.length)
 		{
-			return;
+			numOfBehavior = 0;
+			return true;
 		}
-		else
-		{
-			parent.Say(behaviors[t]);
-		}
-			
+		return false;
 	}
 }

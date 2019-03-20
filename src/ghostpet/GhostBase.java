@@ -8,6 +8,7 @@ import ghost_behaviors.Behavior;
 import ghost_behaviors.Behavior_Ask;
 import ghost_behaviors.Behavior_LongTalk;
 import ghost_behaviors.Behavior_Randomizer;
+import ghost_behaviors.Behavior_Sequence;
 import ghost_behaviors.Behavior_Timed;
 import ghost_behaviors.SleepBehavior;
 
@@ -37,6 +38,8 @@ public class GhostBase extends JPanel {
 	
 	Timer InnerClock;
 	Timer TimedBehaviorClock;
+	
+	Behavior current; //Necessary for implementing sequences.
 	
 	public GhostState state;
 	public GhostJson data;
@@ -82,6 +85,10 @@ public class GhostBase extends JPanel {
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
 			}	
+		}
+		for(Behavior b : behaviorList)
+		{
+			b.setup();
 		}
 	}
 	
@@ -167,16 +174,39 @@ public class GhostBase extends JPanel {
 		return r;
 	}
 	
+	public <T extends Behavior> Boolean AskResultSay(T b)
+	{
+		if(state != GhostState.Asking)
+		{
+			return false;
+		}
+		else
+		{
+			SayAction(b);
+			return true;
+		}
+	}
+	
 	public <T extends Behavior> void Say(T b)
 	{
-		//System.out.println(b.getClass().getSimpleName()); //For testing purposes
+		if(b == null)
+			return;
+		if(((state == GhostState.LongTalk) && (b instanceof Behavior_LongTalk)) || (state == GhostState.Passive))
+		{
+			SayAction(b);
+		}
+	}
+	
+	public <T extends Behavior> void SayAction(T b)
+	{
 		InnerClock.stop();
 		InnerClock = new Timer(60, null); //Resets the timer to clear out all action listeners
+		Clear();
 		
-		if((state != GhostState.Passive) || b == null)
-			return;
-		
-		state = b.entersState;
+		if(b.entersState != null) {
+			state = b.entersState;
+		}
+			
 		
 		if(b instanceof Behavior_Ask)
 		{
@@ -186,9 +216,12 @@ public class GhostBase extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					InnerClock.stop();
-					Reset();
 					if(((Behavior_Ask) b).giveUpBehavior != null) //Only executes if it's not null. If it is, just skips it.
-						Say(((Behavior_Ask) b).giveUpBehavior);
+						AskResultSay(((Behavior_Ask) b).giveUpBehavior);
+					else {
+						Reset();
+					}
+						
 				}
 			});
 			InnerClock.start();
@@ -202,7 +235,6 @@ public class GhostBase extends JPanel {
 				InnerClock.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						Reset();
 						InnerClock.stop();
 						Say(b);
 					}
@@ -214,15 +246,25 @@ public class GhostBase extends JPanel {
 			{
 				((Behavior_LongTalk) b).inc = 0;
 				((Behavior_LongTalk) b).setNum();
-				state = GhostState.Passive;
+				Reset();
 			}
 		}
 		else if(b instanceof Behavior_Timed)
 			Say(((Behavior_Timed) b).b); //Cycles back, allowing timed behaviors to essentially just be timed containers for the real behaviors.
 		else if(b instanceof Behavior_Randomizer)
 		{
-			Reset();
 			((Behavior_Randomizer) b).SelectRandom();
+		}
+		else if(b instanceof Behavior_Sequence)
+		{
+			if(((Behavior_Sequence) b).ExecNextSequence())
+			{
+				current = null;
+			}
+			else 
+			{
+				current = b;
+			}
 		}
 		else if(b instanceof SleepBehavior) //Last special case. Used specifically for shutting down the program.
 		{
@@ -231,8 +273,8 @@ public class GhostBase extends JPanel {
 			InnerClock.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					Reset();
 					InnerClock.stop();
+					Reset();
 					((SleepBehavior) b).Execute();
 				}
 			});
@@ -245,9 +287,8 @@ public class GhostBase extends JPanel {
 			InnerClock.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					Reset();
 					InnerClock.stop();
-					state = GhostState.Passive;
+					Reset();
 				}
 			});
 			InnerClock.start();
@@ -277,11 +318,19 @@ public class GhostBase extends JPanel {
 		gpanel.Say(in);
 		parent.repaint();
 	}
-	public void Reset()
+	public void Clear()
 	{
 		spanel.Reset();
 		gpanel.Reset();
-		state = GhostState.Passive;
 		parent.repaint();
+	}
+	public void Reset() //Specifically only gets called when a behavior is done, thus ensuring that if the behavior is in a sequence it'll only call the next behavior when it's ready.
+	{
+		Clear();
+		state = GhostState.Passive;
+		if(current != null)
+		{
+			Say(current);
+		}
 	}
 }

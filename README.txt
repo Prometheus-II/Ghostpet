@@ -21,7 +21,7 @@
 	* maxHeight is the same as maxWidth, but height. 
 
 >Anatomy of a .json Behavior File
-	There are five kinds of behaviors - normal, multiline, ask, timed, and randomized. I'll go through the details and explain the components of each one, and what changing them accomplishes.
+	There are three kinds of behaviors - normal, multiline, ask - and three "container" behaviors - timed, randomized, and sequence. I'll go through the details and explain the components of each one, and what changing them accomplishes.
 
 	[NORMAL]
 	The default behavior type. Has the following elements:
@@ -43,18 +43,23 @@
 	The behavior type used when the ghost asks for input. Has the following elements:
 	* All the elements from the Normal behavior type. All these are identical, serve the same purpose, and can be modified the same way, although it's advised that you set actTime to a larger value so you have time to respond.
 	* opts: An array of possible choices. Each choice consists of two sub-parts: line and behave. Line is the line of text the ghost lets you click on in the choice menu; behave is the behavior that will be executed if you click on that menu. Basically, if you've created a behavior and you want the ghost to do it after you answer a question from it, this is where you put the name of that behavior.
-	* giveUp: The name of the behavior the ghost performs when you take too long to answer the question. If you wait too long (i.e. longer than actTime), then the ghost will perform this behavior, whatever it is.
+	* giveUp: The name of the behavior the ghost performs when you take too long to answer the question. If you wait too long (i.e. longer than actTime), then the ghost will perform this behavior, whatever it is. Can be null, in which case the ghost just does nothing.
 
 	[TIMED]
 	Actually consists of two separate .json files and classes. The first is the actual behavior, which may be any of the previous kinds of behaviors. The second is the actual timed version, which is named "Timer_[name of first].json" and which I will actually explain here. Has the following elements:
 	* BehaviorExecuted: The name of the behavior that gets executed when the timer "goes off." Can be any behavior, much like the options in the Ask type. 
 	* minSinceLast: *Integer* value that says how many seconds have to pass before the behavior can execute. Yes, integer - the clock for these "ticks" every second, not every fraction of a second. For every second after this, there's a 1/2 chance of the behavior executing on any given tick, providing that no other behavior is executing.
-	* maxSinceLast: Also an integer value, this one tells the maximum number of seconds that can pass before the behavior WILL execute (provided that it's not executing another behavior at the moment). 
+	* maxSinceLast: Also an integer value, this one tells the maximum number of seconds that can pass before the behavior WILL execute (provided that it's not executing another behavior at the moment; if it is, it'll execute immediately after that other behavior finishes). 
 
 	[RANDOMIZED]
-	Like the Timed behavior, it's more of a container for other behaviors, and basically executes a random behavior from its list. Has the following elements:
+	A way to execute one of a large variety of behaviors. Good to combine with Timed for a more organic-seeming ghost, with a semi-random behavior executing at a semi-random time. Has the following elements:
 	* actTime: Just like in multiline, it's meaningless. Ignore it.
 	* behaves: An array of behaviors. The ghost will randomly select one from this array to execute. You can include a behavior multiple times to raise the chances of it occurring; alternately, you can put "null" in the array, causing the ghost to do nothing when that possibility gets selected.
+	
+	[SEQUENCE]
+	A way to execute multiple behaviors in, well, a sequence - behavior 1, then behavior 2, and so on. If an Ask behavior is used, it'll wait for the "response" behavior from the Ask option chosen to complete. Looks almost exactly like Randomized in the JSON file, so be careful. Has the following elements:
+	* actTime: Another case in which actTime is meaningless. Can be ignored.
+	* behaves: An array of behviors. The ghost will execute each behavior in the exact sequence noted. 
 	
 >How You Can Interact With Your Ghost
 	The ghost is actually fairly uninteractive, because I didn't want it to be constantly getting in your way. However, there are a few things you can do with it. Most importantly:

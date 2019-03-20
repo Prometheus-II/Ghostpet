@@ -9,7 +9,6 @@ public class GiveUpBehavior extends Behavior {
 	
 	public GiveUpBehavior(GhostBase frame) {
 		super(frame);
-		// TODO Auto-generated constructor stub
 	}
 
 	public GiveUpBehavior() {

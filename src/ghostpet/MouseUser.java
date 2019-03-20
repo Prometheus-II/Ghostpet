@@ -49,8 +49,7 @@ public class MouseUser extends MouseAdapter {
 	{
 		if(e.getSource() instanceof AskChoiceLabel)
 		{
-			parent.Reset();
-			parent.Say(parent.getBehavior(((AskChoiceLabel<Behavior>) e.getSource()).cls));
+			parent.AskResultSay(parent.getBehavior(((AskChoiceLabel<Behavior>) e.getSource()).cls));
 		}
 	}
 	

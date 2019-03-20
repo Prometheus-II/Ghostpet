@@ -9,7 +9,8 @@
 	"opts":[
 	{"line":"Run a talk test","behave":"GenLongTalkBehavior"},
 	{"line":"Shut down","behave":"SleepBehavior"},
-	{"line":"Cancel","behave":"GiveUpBehavior"}
+	{"line":"Cancel","behave":"GiveUpBehavior"},
+	{"line":"Testing","behave":"PetBehavior"}
 	],
 	
 	"giveUp":"GiveUpBehavior"

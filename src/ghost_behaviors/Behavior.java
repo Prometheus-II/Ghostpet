@@ -78,6 +78,11 @@ public abstract class Behavior {
 		return this.getClass().getSimpleName();
 	}
 	
+	public <T extends Behavior> void setup()
+	{
+		//Filler function. Used to allow everything to call setup() in the initial without causing problems.
+	}
+	
 	/*
 	 * Execution: 
 	 * In your inherited class, you should write in the conditions under which your class executes here. It's just a comment, but it helps you and others keep track.
